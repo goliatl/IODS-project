@@ -1,0 +1,14 @@
+---
+title: "README"
+author: "Anonymous"
+date: "30 Oktober 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# This is a test for the course
+
+## Now here comes a link to my course diary
+<https://goliatl.github.io/IODS-project/>

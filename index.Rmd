@@ -1,5 +1,6 @@
 ---
 title: "IODS course project"
+author: Paul Lassmann-Klee
 output:
   html_document:
     theme: cosmo
