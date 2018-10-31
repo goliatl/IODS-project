@@ -5,11 +5,10 @@ date: "30 Oktober 2018"
 output: html_document
 ---
 
-# About the project
-### The project seems interesting and i enrolled to the course to 
-### learn more about r and open data science
+## About the project
+#### The project seems interesting and i enrolled to the course to 
+#### learn more about r and open data science
 
 ### The link to my github repository is:
 <https://github.com/goliatl/IODS-project>
 
-*Write a short description about the course and add a link to your github repository here. This is an R markdown (.Rmd) file so you can use R markdown syntax. See the 'Useful links' page in the mooc area (chapter 1) for instructions.*
