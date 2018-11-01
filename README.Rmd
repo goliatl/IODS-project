@@ -1,13 +1,7 @@
 ---
-title: "README"
-author: "Anonymous"
-date: "30 Oktober 2018"
 output: github_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 This repository is a key element of the 
 course introduction to open data science 
 at the University of Helsinki in 2018
