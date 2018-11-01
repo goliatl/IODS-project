@@ -1,13 +1,12 @@
 ---
 title: "First chapter"
-author: "Anonymous"
-date: "30 Oktober 2018"
+author: "Paul Lassmann Klee"
+date: "`r Sys.Date()`"
 output: html_document
 ---
 
 ## About the project
-#### The project seems interesting and i enrolled to the course to 
-#### learn more about r and open data science
+The project seems interesting and i enrolled to the course to learn more about r and open data science. This site will be updated as soon as the tasks are completed and a new ABOUT introduction will appear with more details about what the course contents are and more general questions about open data and open science.
 
 ### The link to my github repository is:
 <https://github.com/goliatl/IODS-project>
