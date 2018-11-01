@@ -1,77 +1,11 @@
 ---
-title: "Open Data Science"
-author: "Paul Lassmann Klee"
-date: "`r Sys.Date()`"
-output:
-  prettydoc::html_pretty:
-    theme: cayman
-    highlight: github
-vignette: >
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+title: "Readme"
+output: github_document
 ---
-#Introduction
-THis README is the introduction to the repository for the course OPEN DATA SCIENCE at the University of Helsinki during 2018.
+
+##Introduction
+This README is the introduction to the repository for the course OPEN DATA SCIENCE at the University of Helsinki during 2018.
 The link to my course diary is the following:
 
-#Course diary
-(https://goliatl.github.io/IODS-project/)
-
-
-<!-- ## Styles -->
-
-<!-- Currently `html_pretty` supports three page themes, `cayman` (the default), -->
-<!-- `tactile`, and `architect`. And there are also two syntax highlight styles: -->
-<!-- `github` to mimic the syntax highlight on Github, and `vignette` that is used by -->
-<!-- `html_vignette`. If no highlight parameter is given, the default style created -->
-<!-- by Pandoc will be used. -->
-
-<!-- The theme and highlight styles can be given in the document metadata, -->
-<!-- for example: -->
-
-<!-- ```yaml -->
-<!-- output: -->
-<!--   prettydoc::html_pretty: -->
-<!--     theme: cayman -->
-<!--     highlight: github -->
-<!-- ``` -->
-
-<!-- ## Happy Knitting! -->
-
-<!-- Feel free to use the `knitr` infrastructure with dozens of tunable options in -->
-<!-- your package vignette. -->
-
-<!-- ```{r fig.width=6, fig.height=6, fig.align='center'} -->
-<!-- set.seed(123) -->
-<!-- n <- 1000 -->
-<!-- x1  <- matrix(rnorm(n), ncol = 2) -->
-<!-- x2  <- matrix(rnorm(n, mean = 3, sd = 1.5), ncol = 2) -->
-<!-- x   <- rbind(x1, x2) -->
-<!-- head(x) -->
-<!-- smoothScatter(x, xlab = "x1", ylab = "x2") -->
-<!-- ``` -->
-
-<!-- You can also include code snippets of languages other than R, but note that -->
-<!-- the block header has no curly brackets around the language name. -->
-
-<!-- ```cpp -->
-<!-- // [[Rcpp::export]] -->
-<!-- NumericVector timesTwo(NumericVector x) { -->
-<!--     return x * 2; -->
-<!-- } -->
-<!-- ``` -->
-
-<!-- You can write math expressions, e.g. $Y = X\beta + \epsilon$, -->
-<!-- footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`. -->
-
-<!-- ```{r, echo=FALSE, results='asis'} -->
-<!-- knitr::kable(head(iris, 10)) -->
-<!-- ``` -->
-
-<!-- ## Stay Tuned -->
-
-<!-- Please visit the [development page](http://github.com/yixuan/prettydoc/) of the  -->
-<!-- `prettydoc` package for latest updates and news. Comments, bug reports and -->
-<!-- pull requests are always welcome. -->
-
+####Course diary
+<https://goliatl.github.io/IODS-project/>
