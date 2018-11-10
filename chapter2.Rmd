@@ -1,7 +1,72 @@
-# Insert chapter 2 title here
+# Analysis of Learning Data
 
-*Describe the work you have done this week and summarize your learning.*
 
-- Describe your work and results clearly. 
-- Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
-- Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
+
+The learning data is a dataset collected during 2014 called International survey of 
+Approaches to Learning. The dataset used for these analyses is a modified dataset containing only variables for gender and age of the students, as well as new variables regarding attitude toward statistics, exam points, and scores of deep learning approach, strategic learning approach and surface learning approach.
+
+## Raw analyses
+First we plotted a correlation matrix with ggpairs to find correlations between variables and to visually explore the distribution of the variables.
+We observe that age has a left tailed distribution, meaning that the participants are mainly of young age, as expected from the cohort. The other variables follow more or less a normal distribution, apart of from attitude towards learning in men, which is slight right-tailed. 
+We found a positive correlation between attitude and exam points. There is a negative correlation between deep learning approach and superficial learning approach. 
+See plot below:
+
+```{r, echo=FALSE}
+learning2014<-read.csv("https://s3.amazonaws.com/assets.datacamp.com/production/course_2218/datasets/learning2014.txt", 
+                         header = TRUE, sep = ",")
+
+# access the GGally and ggplot2 libraries
+library(GGally)
+library(ggplot2)
+# create a more advanced plot matrix with ggpairs()
+p <- ggpairs(learning2014, mapping = aes(col=gender,alpha=0.3), lower = list(combo = wrap("facethist", bins = 20)))
+
+
+```
+```{r, echo=FALSE}
+# draw the plot
+
+p
+```
+We obtained descriptive statistics grouped by gender and observed that mean age in males is higher than in female, as well as attitude. The other variables have similar means between the groups. See table below. Performing simple t-tests, we found only significant (p<0.001) for the differences in mean attitude between genders.
+
+```{r, echo=FALSE, message=FALSE,}
+library("psych")
+library("dplyr")
+
+table.descriptive<-psych::describeBy(learning2014, group = learning2014$gender,digits = 1,mat=TRUE, IQR=TRUE)%>%as_data_frame()
+table.descriptive<-select(table.descriptive,-c(1,3:4,8:15))
+knitr::kable(table.descriptive)
+# xt<-xtable::xtable(table.descriptive)
+# print(xt,type = "html" )
+
+```
+
+```{r,echo=FALSE,results="hide"}
+lapply(learning2014[,c("attitude", "age", "deep", "stra", "surf","points")], function(x) t.test(x ~ learning2014$gender, var.equal = TRUE))
+```
+
+```{r, echo=FALSE,results="hide"}
+m.1<-glm(points~attitude+deep+surf,data = learning2014)
+summary(m.1)
+#m.2<-glm(points~attitude+stra+age,data = learning2014)
+m.2<-lm(points~attitude+stra+age,data = learning2014)
+summary(m.2)
+anova(m.1,m.2)
+m.3<-glm(points~attitude+stra+age+gender,data = learning2014)
+m.3
+anova(m.2,m.3)
+```
+# Multiple linear model
+We fitted a linear model for exam points as outcome and attitude, strategy and age as explanatory variables. The summary of the model is presented below. We found that participants with  higher scores in attitude had higher exam points (p<0.0001). There was a trend of higher scores in strategy having higher exam points. Controlling for gender did not modified the results of the model substantially. The summary of the model can be found below. The model has an adjusted R-squared of 0.2037, this means the model can expain or predict 20% of the data, which is quite reasonable for survey data. The model can be defined as following
+Exam points= 10.9+ 3.5*attitude + strategy -0.1*age
+```{r,results="asis",echo=FALSE}
+stargazer::stargazer(m.2,type="html")
+
+```
+ When making diagnostic plots of our model, we found a random pattern in the residuals vs. fitted plot, meaning no bias, an almost linear qq plot which indicates normality and the residuals vs. leverage plot shows no outliers whcih could affect the modelling.
+```{r,echo=FALSE}
+par(mfrow = c(2,2))
+plot(m.2, which = c(1:2, 5))
+```
+
