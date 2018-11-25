@@ -23,7 +23,11 @@ vignette: >
 
 ***
 
+  
+```{r child = "chapter4.Rmd"}
+```
 
+***
 
 <!-- ## Styles -->
 

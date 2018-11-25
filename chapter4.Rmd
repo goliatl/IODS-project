@@ -1,0 +1,143 @@
+---
+title: "Chapter 4"
+author: "Paul Lassmann Klee"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r, echo=FALSE, message=FALSE,results="hide"}
+library(MASS)
+library(ggplot2)
+library(GGally)
+library(dplyr)
+data("Boston")
+str(Boston)
+head(Boston)
+dim(Boston)
+```
+# Chapter 4
+## Use of Boston data from MASS library
+Boston is dataset with 506 observations and 14 variables of housing values in the suburbs of Boston
+Correlation plot matrix and summaries of the variables can be found below 
+```{r, echo=FALSE, message=FALSE,}
+# create a  plot matrix with ggpairs()
+  p <- ggpairs(Boston, upper = list(continuous = wrap("cor", size = 2)))+ theme_bw()
+  
+
+
+
+
+
+```
+```{r, echo=FALSE, message=FALSE}
+# draw the plot
+
+p
+
+```
+
+We observe middle-strong correlations (ca. 0.6) between the variables rad and crim, tax and crim, age and zn, dis and zn, nox and indus, age and indus, dis and indus, rad and indus, tax and indus, lstat and indus, age and nox, dis and nox, rad and nox, tax and nox, lstat and nox, lstat and rm, medv and rm, dis and age, lstat and age, tax and rad, lstat and medv. 
+None of the variables is normally distributed, apart from rm that appears to follow a normal distribution. 
+ 
+###Descriptive statistics (summary) of variables in Boston in following table.
+```{r, echo=FALSE, message=FALSE,}
+table.descriptive<-psych::describe(Boston, IQR=TRUE)#%>%as_data_frame()
+table.descriptive<-subset (table.descriptive,select= -c(1:2,6:12))
+table.descriptive<-round(table.descriptive,digits = 1)
+knitr::kable(table.descriptive)
+```
+
+Therefore, we standardised the data.
+```{r, echo=FALSE, message=FALSE,results="hide"}
+boston_scaled <- scale(Boston)
+summary(boston_scaled)
+boston_scaled<-as.data.frame(boston_scaled)
+bins <- quantile(boston_scaled$crim)
+bins
+crime <- cut(boston_scaled$crim, breaks = bins, include.lowest = TRUE)
+```
+
+###Descriptive statistics (summary) of standardized variables in Boston in following table. Observe the mean O after standardization and standard deviation of 1
+```{r, echo=FALSE, message=FALSE,}
+table.descriptive2<-psych::describe(boston_scaled, IQR=TRUE)#%>%as_data_frame()
+table.descriptive2<-subset (table.descriptive2,select= -c(1:2,6:12))
+table.descriptive2<-round(table.descriptive2,digits = 1)
+knitr::kable(table.descriptive2)
+```
+
+```{r, echo=FALSE, message=FALSE}
+# remove original crim from the dataset
+boston_scaled <- dplyr::select(boston_scaled, -crim)
+
+# add the new categorical value to scaled data
+boston_scaled <- data.frame(boston_scaled, crime)
+
+# number of rows in the Boston dataset 
+n <- nrow(boston_scaled)
+
+# choose randomly 80% of the rows
+ind <- sample(n,  size = n * 0.8)
+
+# create train set
+train <- boston_scaled[ind,]
+
+# create test set 
+test <- boston_scaled[-ind,]
+
+# save the correct classes from test data
+correct_classes <- test$crime
+
+# remove the crime variable from test data
+test <- dplyr::select(test, -crime)
+
+```
+We fitted a linear discriminant analysis to the target variable crime and its classes. 
+We divided the standardised Boston data set into a training and a test set, with 80% of the data assigned to the training dataset. 
+
+We plotted this lda model in the following biplot
+```{r, echo=FALSE, message=FALSE,results="hide"}
+
+
+# linear discriminant analysis
+lda.fit <- lda(crime~., data = train)
+
+# print the lda.fit object
+lda.fit
+
+# the function for lda biplot arrows
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "black", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=2)
+}
+
+# target classes as numeric
+classes <- as.numeric(train$crime)
+
+# plot the lda results
+ldaplot<-plot(lda.fit, dimen = 2,col=classes, pch=classes)
+lda.arrows(lda.fit, myscale = 1)
+
+# predict classes with test data
+lda.pred <- predict(lda.fit, newdata =test)
+
+# cross tabulate the results
+crosstable<-table(correct = correct_classes, predicted = lda.pred$class)
+
+
+
+```
+
+
+
+
+```{r, echo=FALSE, message=FALSE}
+ldaplot
+crosstable
+```
+
+As noted in the biplot the predictor variable rad ( radial highway )predicts a high crime per capita ( blue). On the other hand a high proportion of residential land zoned for lots over 25,000 sq.ft. (variable zn) predicts a low crime per capita.
+The middle crime per capita depicted in red in green has overlaps and is predicted by multiple predictors.
