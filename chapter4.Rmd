@@ -136,8 +136,58 @@ crosstable<-table(correct = correct_classes, predicted = lda.pred$class)
 
 ```{r, echo=FALSE, message=FALSE}
 ldaplot
-crosstable
+knitr::kable(crosstable)
 ```
 
 As noted in the biplot the predictor variable rad ( radial highway )predicts a high crime per capita ( blue). On the other hand a high proportion of residential land zoned for lots over 25,000 sq.ft. (variable zn) predicts a low crime per capita.
 The middle crime per capita depicted in red in green has overlaps and is predicted by multiple predictors.
+
+We predicted classes with the lda model and observed that the lda model predicts very efficently the crime rates above the mean (i.e. higher crime rates), but fails to distinguish the lower crime classes in an effective manner. 
+
+```{r, echo=FALSE, message=FALSE,results="hide"}
+data("Boston")
+scaled.Boston<-scale(Boston)
+dist_eu <-dist(scaled.Boston)
+km <-kmeans(scaled.Boston, centers = 3)
+```
+
+### We calculated the distances between the observations in the standardised Boston dataset and performed an k means clustering analysis. We obtained two clusters and see that for example rad predicts well the two crime clusters.
+
+```{r, echo=FALSE, message=FALSE,results="hide"}
+library(plotly)
+
+model_predictors <- dplyr::select(train, -crime)
+
+# check the dimensions
+dim(model_predictors)
+dim(lda.fit$scaling)
+
+# matrix multiplication
+matrix_product <- as.matrix(model_predictors) %*% lda.fit$scaling
+matrix_product <- as.data.frame(matrix_product)
+
+
+set.seed(123)
+
+# determine the number of clusters
+k_max <- 10
+
+# calculate the total within sum of squares
+twcss <- sapply(1:k_max, function(k){kmeans(scaled.Boston, k)$tot.withinss})
+
+# visualize the results
+#qplot(x = 1:k_max, y = twcss, geom = 'line')
+
+# k-means clustering
+km <-kmeans(scaled.Boston, centers = 2)
+
+
+
+
+Tdplot1<-plot_ly(x = matrix_product$LD1, y = matrix_product$LD2, z = matrix_product$LD3, color = train$crime, colors = "PuBuGn", type= 'scatter3d', mode='markers')
+```
+
+```{r, echo=FALSE, message=FALSE}
+pairs(scaled.Boston, col = km$cluster)
+Tdplot1
+```
