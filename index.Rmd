@@ -29,6 +29,11 @@ vignette: >
 
 ***
 
+```{r child = "Chapter6.Rmd"}
+```
+
+***
+
 <!-- ## Styles -->
 
 <!-- Currently `html_pretty` supports three page themes, `cayman` (the default), -->
